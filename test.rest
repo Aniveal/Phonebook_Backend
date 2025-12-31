@@ -1,0 +1,23 @@
+GET http://localhost:3001/api/persons
+Content-Type: application/json
+
+###
+GET http://localhost:3001/info
+Content-Type: text/html
+
+###
+GET http://localhost:3001/api/persons/1
+Content-Type: application/json
+
+###
+DELETE http://localhost:3001/api/persons/9137
+
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name":"Timo",
+    "number":"076 281 39 27"
+}
