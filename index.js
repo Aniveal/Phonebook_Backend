@@ -1,3 +1,5 @@
+mongodb+srv://TimoLoher:<db_password>@phonebookcluster.jepzei2.mongodb.net/?appName=PhonebookCluster
+
 
 const express = require('express')
 const app = express()
