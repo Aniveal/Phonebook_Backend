@@ -1,5 +1,3 @@
-mongodb+srv://TimoLoher:<db_password>@phonebookcluster.jepzei2.mongodb.net/?appName=PhonebookCluster
-
 
 const express = require('express')
 const app = express()
@@ -9,48 +7,25 @@ app.use(cors())
 app.use(express.json())
 app.use(express.static('dist'))
 
-let persons = [
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
+const phoneEntry = require('./databaseConnection')
+
+
+// =========== API ==============
 
 app.get("/api/persons", (req, res) =>{
-    res.json(persons)
+    phoneEntry.find({}).then(persons => {
+      res.json(persons)
+    })
 })
 
 app.get("/info", (req, res) => {
-    res.send("<p>The page has " + persons.length + " people in it.</p>" 
+    res.send("<p>The page has " + phoneEntry.find({}).length + " people in it.</p>" 
       + "<p>" + new Date() + "</p>")
 })
 
 app.get("/api/persons/:id", (req, res) => {
-    const person = persons.find(person => person.id === req.params.id)
-    if(!person)
-    {
-      res.status(404).end()
-    }
-    else
-    {
-      res.json(person)
-    }
+    const entry = phoneEntry.findById(req.params.id).then(note =>res.json(note))
+
 })
 
 app.post("/api/persons", (req, res) => {
@@ -80,20 +55,19 @@ app.post("/api/persons", (req, res) => {
       return
     }
 
+    newEntry = new phoneEntry({
+      id: String(newId),
+      name: req.body.name,
+      number: req.body.number
+    })
 
-    const newPerson = {
-      id:String(newId),
-      name:req.body.name,
-      number:req.body.number
-    }
 
-    persons = persons.concat(newPerson)
-      
-    res.status(200).json(newPerson).end()
+    newEntry.save().then(res.status(200).json(newPerson).end())
+    
 })
 
 app.delete("/api/persons/:id", (req, res) => {
-  const person = persons.find(person => person.id === req.params.id)
+  const person = phoneEntry.findById(req.params.id).then()
   if(!person)
   {
     res.status(404).end()
