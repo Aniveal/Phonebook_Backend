@@ -6,7 +6,7 @@ GET https://phonebook-backend-vcdv.onrender.com/api/persons/1
 Content-Type: application/json
 
 ###
-DELETE https://phonebook-backend-vcdv.onrender.com/api/persons/9137
+DELETE https://phonebook-backend-vcdv.onrender.com/api/persons/4
 
 
 ###
@@ -17,3 +17,24 @@ Content-Type: application/json
     "name":"Timo",
     "number":"076 281 39 27"
 }
+###
+GET http://localhost:3001/api/persons
+Content-Type: application/json
+
+###
+GET http://localhost:3001/api/persons/6957ecfc102b3d5517240293
+Content-Type: application/json
+
+###
+DELETE http://localhost:3001/api/persons/6957ecfc102b3d5517240293
+
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name":"Timo",
+    "number":"076 281 39 27"
+}
+

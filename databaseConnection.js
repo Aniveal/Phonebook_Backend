@@ -1,11 +1,18 @@
 // =========== DATABASE ==============
 const mongoose = require('mongoose')
 
-const url = process.env.MONGODB_URI
+
+const url = process.env.MONGODB_URL
+const password = encodeURIComponent(String(process.env.PASSWORD))
+const username = process.env.MONGODB_USER
+
+const finalURI = "mongodb+srv://"+username+":"+ password +"@" + url
+
+console.log("url: " + finalURI)
 
 mongoose.set('strictQuery',false)
 
-mongoose.connect(url, { family: 4 })
+mongoose.connect(finalURI, { family: 4 })
 
 const phoneEntrySchema = new mongoose.Schema({
   name: String,
@@ -20,4 +27,4 @@ phoneEntrySchema.set('toJSON', {
   }
 })
 
-module.exprts = mongoose.model("PhoneEntry", phoneEntrySchema)
+module.exports = mongoose.model("PhoneEntry", phoneEntrySchema)
