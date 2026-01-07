@@ -30,10 +30,13 @@ app.get("/info", (req, res) => {
       + "<p>" + new Date() + "</p>")
 })
 
-app.get("/api/persons/:id", (req, res) => {
+app.get("/api/persons/:id", (req, res, next) => {
     PhoneEntry.findById(req.params.id).then(
       note =>
         res.json(note))
+      .catch(
+        error => next(error)
+      )
 
 })
 
@@ -46,6 +49,7 @@ app.put("/api/persons:id", (req, res) => {
     entry.name = req.params.name
     entry.save().then(res.status(200).json(entry).end())
   })
+  .catch(error => next(error))
 
 })
 
@@ -80,7 +84,10 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  } else if
+    (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
 
   next(error)
 }

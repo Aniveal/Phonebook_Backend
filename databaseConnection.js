@@ -15,8 +15,14 @@ mongoose.set('strictQuery',false)
 mongoose.connect(finalURI, { family: 4 })
 
 const phoneEntrySchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    required: true
+  },
+  number: {
+    type: String,
+    required: true
+  }
 })
 
 phoneEntrySchema.set('toJSON', {
