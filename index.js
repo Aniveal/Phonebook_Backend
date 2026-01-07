@@ -37,6 +37,18 @@ app.get("/api/persons/:id", (req, res) => {
 
 })
 
+app.put("/api/persons:id", (req, res) => {
+
+  console.log("put request: " + req.params.id + ", " + req.params.id)
+  PhoneEntry.findById(req.params.id).then( entry =>
+  {
+    console.log("put request: " + req.params.id)
+    entry.name = req.params.name
+    entry.save().then(res.status(200).json(entry).end())
+  })
+
+})
+
 app.post("/api/persons", (req, res) => {
 
     newEntry = new PhoneEntry({
@@ -62,6 +74,19 @@ app.delete("/api/persons/:id", (req, res) => {
     }
   })
 })
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+// this has to be the last loaded middleware, also all the routes should be registered before this!
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
